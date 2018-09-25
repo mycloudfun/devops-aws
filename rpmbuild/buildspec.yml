@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+       - echo install rpm packages
+       - apt-get update
+       - apt-get install rpm tree -y
+  pre_build:
+    commands:
+       - echo check rpmbuild version
+       - rpmbuild --version
+  build:
+    commands:
+       - echo start building process
+       - rpmbuild -ba -v SPECS/motd.spec
+       - mv RPMS/noarch/*.rpm codedeploy/
+  post_build:
+    commands:
+       - echo checking content
+       - tree codedeploy
+artifacts:
+  files:
+     - codedeploy/*
+  discard-paths: yes
+
